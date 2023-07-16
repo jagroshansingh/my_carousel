@@ -1,10 +1,11 @@
 import logo from "./logo.svg";
 import "./App.css";
-import React from 'react'
+import React, { useRef } from "react";
 
 function App() {
-  const [count,setCount]=React.useState(0)
-  console.log(count)
+  const [count, setCount] = React.useState(0);
+  const intref=useRef(null)
+  console.log(count);
 
   let allImages = [
     "https://m.media-amazon.com/images/I/71W5IMP9-cL._AC_UL480_FMwebp_QL65_.jpg",
@@ -13,15 +14,26 @@ function App() {
     "https://m.media-amazon.com/images/I/71QH6ZsXHKL._AC_UL480_FMwebp_QL65_.jpg",
   ];
 
-  const BtnClick=(direction)=>{
-    if(direction==1) setCount(count+1)
-    else setCount(count-1)
+  const BtnClick = (direction) => {
+    if (direction) setCount(count + 1);
+    else setCount(count - 1);
+  };
+
+  const handleHover=()=>{
+    
   }
 
-  React.useEffect(()=>{
-    if(count==4) setCount(0)
-    else if(count==-1) setCount(3)
-  })
+  React.useEffect(() => {
+    if(intref.current) clearInterval(intref.current)
+    intref.current=setInterval(() => {
+      setCount(prev=>prev+1);
+    }, 2000);
+  }, []);
+
+  React.useEffect(() => {
+    if (count == 4) setCount(0);
+    else if (count == -1) setCount(3);
+  }, [count]);
 
   return (
     <div className="App">
@@ -41,14 +53,11 @@ function App() {
       </header> */}
 
       <div className="Container">
-        <button onClick={()=>BtnClick(-1)}>Left</button>
+        <button onClick={() => BtnClick(false)}>Left</button>
         <div className="ImageContainer">
-          <img
-            alt="image1"
-            src={allImages[count]}
-          />
+          <img alt="image1" src={allImages[count]} onMouseOver={handleHover}/>
         </div>
-        <button onClick={()=>BtnClick(1) }>Right</button>
+        <button onClick={() => BtnClick(true)}>Right</button>
       </div>
     </div>
   );
