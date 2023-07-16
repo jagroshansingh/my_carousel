@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 
 function App() {
   const [count, setCount] = React.useState(0);
+  const [restart,setRestart]=React.useState(false)
   const intref=useRef(null)
   console.log(count);
 
@@ -20,15 +21,19 @@ function App() {
   };
 
   const handleHover=()=>{
-    
+    clearInterval(intref.current)
+  }
+
+  const handleLeave=()=>{
+    setRestart(prev=>!prev)
   }
 
   React.useEffect(() => {
     if(intref.current) clearInterval(intref.current)
     intref.current=setInterval(() => {
       setCount(prev=>prev+1);
-    }, 2000);
-  }, []);
+    }, 1000);
+  }, [restart]);
 
   React.useEffect(() => {
     if (count == 4) setCount(0);
@@ -55,7 +60,7 @@ function App() {
       <div className="Container">
         <button onClick={() => BtnClick(false)}>Left</button>
         <div className="ImageContainer">
-          <img alt="image1" src={allImages[count]} onMouseOver={handleHover}/>
+          <img alt="image1" src={allImages[count]} onMouseOver={handleHover} onMouseLeave={handleLeave}/>
         </div>
         <button onClick={() => BtnClick(true)}>Right</button>
       </div>
